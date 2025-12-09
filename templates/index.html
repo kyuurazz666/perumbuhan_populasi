@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Simulasi Populasi — RK4</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>Simulasi Pertumbuhan Populasi — Model Logistik + RK4</h1>
+      <p class="subtitle">Pilih negara dan rentang tahun. Sistem akan estimasi parameter dan menjalankan simulasi.</p>
+    </header>
+
+    <main class="panel">
+      <form id="simForm" onsubmit="return false;">
+        <div class="row">
+          <label>Negara</label>
+          <select id="country" required>
+            {% for c in countries %}
+            <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="row dual">
+          <div>
+            <label>Tahun Awal</label>
+            <select id="start_year">
+              {% for y in years %}
+              <option value="{{ y }}">{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label>Tahun Akhir</label>
+            <select id="end_year">
+              {% for y in years %}
+              <option value="{{ y }}">{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="row actions">
+          <button id="runBtn" class="btn primary" onclick="runSim()">Run Simulation</button>
+          <button id="resetBtn" class="btn" onclick="resetOutput()">Reset</button>
+        </div>
+      </form>
+
+      <section id="output" class="output hidden">
+        <div class="cards">
+          <div class="card">
+            <h3>Parameter</h3>
+            <p><b>r (laju):</b> <span id="r_val"></span></p>
+            <p><b>K (kapasitas):</b> <span id="k_val"></span></p>
+            <p><b>RMSE:</b> <span id="rmse_val"></span></p>
+          </div>
+          <div class="card">
+            <h3>Validasi (observasi vs Euler)</h3>
+            <table id="val_table">
+              <thead><tr><th>Tahun</th><th>Observasi</th><th>Euler</th><th>Error</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="charts">
+          <div class="chart-card">
+            <h4>Observasi vs Simulasi (RK4 & Eksak)</h4>
+            <canvas id="mainChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Error Absolut per Tahun</h4>
+            <canvas id="errChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <footer class="note">
+        <p>Desain: Futuristic UI • Simulasi menggunakan RK4 • Dataset: population_by_year_2014_2024.csv</p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
